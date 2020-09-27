@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../dist/css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<style>
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title" >纪念日</h1>
+		</header>
+		<div class="mui-content" id="app">
+
+			<div class="title" v-on:click="addDb">
+				纪念日期
+			</div>
+			<ul class="mui-table-view">
+
+				<li class="mui-table-view-cell mui-media" v-for="item in list">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-left" src="../images/shuijiao.jpg">
+						<div class="mui-media-body">
+							{{ item.begin }} ，距今 {{ item.day }} 天
+							<p class='mui-ellipsis'>{{ item.method }}</p>
+						</div>
+					</a>
+				</li>				
+
+			</ul>
+
+		</div>
+
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script>
+		mui.init({
+			swipeBack:true //启用右滑关闭功能
+		});
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				dbname : 'jnday',
+				db : '',
+				list: [
+					{'begin':'2020-05-10', 'method':'begin inner'}
+				]
+			},
+			methods: {
+				getListFromDb: function () {
+					var db;
+				},
+				addDb: function(){
+					var stroage = window.localStorage;
+					stroage.setItem(this.dbname, JSON.stringify([
+						{'begin':'2020-05-10', 'method':'begin inner'}
+					]));
+				},
+				readDb: function(){
+					var stroage = window.localStorage;
+					
+					this.list.forEach(element => {
+						lastDate = new Date( 2020, 4, 10, 0, 0, 0);
+						lastTime = lastDate.getTime() / 1000;
+
+						theTime = new Date(new Date().toLocaleDateString()).getTime() / 1000;
+						element.day = (theTime - lastTime) / 86400;
+					});
+				}
+			},
+
+
+			created: function () {
+				this.readDb();
+			}
+		});
+
+
+
+
+
+	</script>
+</html>
